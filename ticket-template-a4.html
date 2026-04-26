@@ -1,0 +1,435 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Argo Ticket Reference Template</title>
+  <style>
+    #argo-ticket-template {
+      --page-width: 210mm;
+      --page-height: 297mm;
+      --page-padding: 11mm;
+      --surface: #ffffff;
+      --text: #151515;
+      --muted: #6d6870;
+      --green: #10c62a;
+      --font-display: "Myriad Arabic", "Myriad Pro", Arial, Helvetica, sans-serif;
+      --font-body: "Myriad Arabic", "Myriad Pro", Arial, Helvetica, sans-serif;
+      font-family: var(--font-body);
+      color: var(--text);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    #argo-ticket-template,
+    #argo-ticket-template * {
+      box-sizing: border-box;
+    }
+
+    #argo-ticket-template .ticket-page {
+      margin: 0;
+      padding: 6mm 0;
+      background: #e7e7eb;
+      min-height: 100vh;
+    }
+
+    #argo-ticket-template .ticket-sheet {
+      width: var(--page-width);
+      min-height: var(--page-height);
+      margin: 0 auto;
+      background: var(--surface);
+      border: 0.35mm solid #e4e4e6;
+      padding: var(--page-padding);
+    }
+
+    #argo-ticket-template .ticket-topbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8mm;
+      align-items: start;
+      padding: 1.5mm 3.5mm 0 2.7mm;
+    }
+
+    #argo-ticket-template .client-mark {
+      width: 35mm;
+      min-height: 22mm;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      color: #117dcb;
+      font-family: var(--font-display);
+      font-size: 7.9mm;
+      line-height: 0.94;
+      font-weight: 800;
+      letter-spacing: -0.055em;
+    }
+
+    #argo-ticket-template .client-mark img {
+      max-width: 100%;
+      max-height: 24mm;
+      object-fit: contain;
+      display: block;
+    }
+
+    #argo-ticket-template .ticket-meta {
+      font-family: var(--font-display);
+      font-size: 4.45mm;
+      line-height: 1.12;
+      font-weight: 800;
+      letter-spacing: 0.045em;
+      text-align: left;
+      padding-top: 1.2mm;
+    }
+
+    #argo-ticket-template .ticket-meta-row {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      justify-content: end;
+      column-gap: 3.1mm;
+      white-space: nowrap;
+      margin-bottom: 0.55mm;
+    }
+
+    #argo-ticket-template .status-ok {
+      color: var(--green);
+    }
+
+    #argo-ticket-template .exact-section {
+      margin-top: 10.7mm;
+      width: 188mm;
+      border-radius: 4.4mm;
+      overflow: hidden;
+    }
+
+    #argo-ticket-template .exact-section img {
+      width: 100%;
+      display: block;
+    }
+
+    #argo-ticket-template .is-hidden {
+      display: none !important;
+    }
+
+    #argo-ticket-template .passengers {
+      margin-top: 9.2mm;
+      border: 0.32mm solid #6f6f73;
+      border-radius: 4.4mm;
+      overflow: hidden;
+      background: #f6f6f8;
+    }
+
+    #argo-ticket-template .passengers-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    #argo-ticket-template .passengers-table th,
+    #argo-ticket-template .passengers-table td {
+      border-right: 0.25mm solid #8b8b90;
+      border-top: 0.25mm solid #8b8b90;
+      text-align: center;
+      padding: 1.95mm 2.2mm;
+    }
+
+    #argo-ticket-template .passengers-table tr:first-child th {
+      border-top: none;
+    }
+
+    #argo-ticket-template .passengers-table th:last-child,
+    #argo-ticket-template .passengers-table td:last-child {
+      border-right: none;
+    }
+
+    #argo-ticket-template .passengers-table thead th {
+      font-family: var(--font-display);
+      font-size: 5.15mm;
+      line-height: 1.02;
+      font-weight: 800;
+      background: #fbfbfc;
+      letter-spacing: 0.01em;
+    }
+
+    #argo-ticket-template .passengers-table tbody td {
+      font-size: 5.55mm;
+      line-height: 1.08;
+      background: #e3e3e6;
+      font-weight: 500;
+    }
+
+    #argo-ticket-template .footer-contact {
+      margin-top: 24mm;
+      border: 0.28mm solid #7b7b80;
+      border-radius: 2.4mm;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.4mm;
+      padding: 2.1mm 2.8mm;
+      font-size: 4.7mm;
+      font-weight: 700;
+      align-items: center;
+      background: #fff;
+      line-height: 1.05;
+    }
+
+    #argo-ticket-template .footer-contact .center {
+      text-align: center;
+    }
+
+    #argo-ticket-template .footer-contact .right {
+      text-align: right;
+    }
+
+    #argo-ticket-template .contact-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.35mm;
+      white-space: nowrap;
+    }
+
+    #argo-ticket-template .contact-item img {
+      display: block;
+      flex: 0 0 auto;
+    }
+
+    #argo-ticket-template .contact-item.location img {
+      width: 4.2mm;
+      height: 6.2mm;
+    }
+
+    #argo-ticket-template .contact-item.email img {
+      width: 5.5mm;
+      height: 3.5mm;
+    }
+
+    #argo-ticket-template .contact-item.phone img {
+      width: 4.5mm;
+      height: 6.1mm;
+    }
+
+    #argo-ticket-template .thanks {
+      margin-top: 2.4mm;
+      background: #117dcb;
+      color: #fff;
+      text-align: center;
+      padding: 2.8mm 3mm 2.5mm;
+      font-family: var(--font-display);
+      font-size: 5.7mm;
+      font-weight: 700;
+      font-style: italic;
+      letter-spacing: 0.01em;
+    }
+
+    #argo-ticket-template .portal {
+      margin-top: 3.1mm;
+      text-align: center;
+      font-size: 4.9mm;
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+
+      #argo-ticket-template .ticket-page {
+        background: #fff;
+        padding: 0;
+      }
+
+      #argo-ticket-template .ticket-sheet {
+        margin: 0;
+        border: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="argo-ticket-template">
+    <main class="ticket-page">
+      <section class="ticket-sheet">
+        <header class="ticket-topbar">
+          <div class="client-mark" id="clientMark">Client<br />Logo</div>
+
+          <div class="ticket-meta">
+            <div class="ticket-meta-row"><span>PNR</span><span>:</span><span id="pnr">ABCD12</span></div>
+            <div class="ticket-meta-row"><span>ID NO</span><span>:</span><span id="idNo">123456</span></div>
+            <div class="ticket-meta-row"><span>Date</span><span>:</span><span id="issueDate">03MAR.2025</span></div>
+            <div class="ticket-meta-row"><span>Status</span><span>:</span><span id="status" class="status-ok">Confirmed</span></div>
+          </div>
+        </header>
+
+        <section id="firstSection" class="exact-section" aria-label="First ticket section">
+          <img id="firstSectionImage" src="assets/first-section/ticket-1-exact.png" alt="First ticket section exact reference" />
+        </section>
+
+        <section id="secondSection" class="exact-section" aria-label="Second ticket section">
+          <img id="secondSectionImage" src="assets/second-section/ticket-2-exact.png?v=3" alt="Second ticket section exact reference" />
+        </section>
+
+        <section class="passengers">
+          <table class="passengers-table">
+            <thead>
+              <tr>
+                <th style="width: 44%;">Passenger Name</th>
+                <th style="width: 19%;">Type</th>
+                <th style="width: 37%;">Ticket No</th>
+              </tr>
+            </thead>
+            <tbody id="passengerRows">
+              <tr>
+                <td>MR. ALI ESSA</td>
+                <td>Adult</td>
+                <td>1254759523</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="footer-contact">
+          <div>
+            <span class="contact-item location"><img src="assets/contact/location-icon.png" alt="" /><span id="contactAddressText">Syria - Homs - AlDablan</span></span>
+          </div>
+          <div class="center">
+            <span class="contact-item email"><img src="assets/contact/email-icon.png" alt="" /><span id="contactWebsiteText">Caesar-Road.com</span></span>
+          </div>
+          <div class="right">
+            <span class="contact-item phone"><img src="assets/contact/phone-icon.png" alt="" /><span id="contactPhoneText">+964 751 851 0187</span></span>
+          </div>
+        </section>
+
+        <section class="thanks">Thank You For Choosing to Fly With <span id="thanksClientName">Client Name</span></section>
+        <div class="portal" id="portalUrl">https://b2b.argo-fly.com</div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const DEFAULT_DATA = {
+        clientLogoUrl: "",
+        clientName: "client name",
+        pnr: "ABCD12",
+        idNo: "123456",
+        issueDate: "03MAR.2025",
+        status: "Confirmed",
+        portalUrl: "https://b2b.argo-fly.com",
+        passengers: [
+          { name: "MR. ALI ESSA", type: "Adult", ticketNo: "1254759523" }
+        ],
+        contactAddress: "Syria - Homs - AlDablan",
+        contactWebsite: "Caesar-Road.com",
+        contactPhone: "+964 751 851 0187",
+        showFirstSection: true,
+        showSecondSection: true,
+        firstSectionImageSrc: "assets/first-section/ticket-1-exact.png",
+        secondSectionImageSrc: "assets/second-section/ticket-2-exact.png?v=3"
+      };
+
+      function setText(id, value) {
+        const element = document.getElementById(id);
+        if (element && value != null) {
+          element.textContent = String(value);
+        }
+      }
+
+      function clearElement(element) {
+        while (element.firstChild) {
+          element.removeChild(element.firstChild);
+        }
+      }
+
+      function setClientLogo(url) {
+        const container = document.getElementById("clientMark");
+        if (!container) return;
+
+        clearElement(container);
+
+        if (!url) {
+          container.appendChild(document.createTextNode("Client"));
+          container.appendChild(document.createElement("br"));
+          container.appendChild(document.createTextNode("Logo"));
+          return;
+        }
+
+        const image = document.createElement("img");
+        image.src = url;
+        image.alt = "Client logo";
+        container.appendChild(image);
+      }
+
+      function setPassengers(passengers) {
+        const body = document.getElementById("passengerRows");
+        if (!body || !Array.isArray(passengers) || passengers.length === 0) return;
+
+        clearElement(body);
+
+        passengers.forEach(function (passenger) {
+          const row = document.createElement("tr");
+          const nameCell = document.createElement("td");
+          const typeCell = document.createElement("td");
+          const ticketCell = document.createElement("td");
+
+          nameCell.textContent = String(passenger.name || "");
+          typeCell.textContent = String(passenger.type || "");
+          ticketCell.textContent = String(passenger.ticketNo || "");
+
+          row.appendChild(nameCell);
+          row.appendChild(typeCell);
+          row.appendChild(ticketCell);
+          body.appendChild(row);
+        });
+      }
+
+      function setSectionVisibility(id, shouldShow) {
+        const section = document.getElementById(id);
+        if (!section) return;
+        const visible = shouldShow !== false;
+        section.classList.toggle("is-hidden", !visible);
+      }
+
+      function setFirstSectionImage(src) {
+        const image = document.getElementById("firstSectionImage");
+        if (image && src) {
+          image.src = src;
+        }
+      }
+
+      function setSecondSectionImage(src) {
+        const image = document.getElementById("secondSectionImage");
+        if (image && src) {
+          image.src = src;
+        }
+      }
+
+      function applyTicketData(input) {
+        const data = Object.assign({}, DEFAULT_DATA, input || {});
+
+        setClientLogo(data.clientLogoUrl);
+        setText("thanksClientName", data.clientName);
+        setText("pnr", data.pnr);
+        setText("idNo", data.idNo);
+        setText("issueDate", data.issueDate);
+        setText("status", data.status);
+        setText("portalUrl", data.portalUrl);
+        setPassengers(data.passengers);
+        setSectionVisibility("firstSection", data.showFirstSection);
+        setSectionVisibility("secondSection", data.showSecondSection);
+        setFirstSectionImage(data.firstSectionImageSrc);
+        setSecondSectionImage(data.secondSectionImageSrc);
+
+        setText("contactAddressText", data.contactAddress);
+        setText("contactWebsiteText", data.contactWebsite);
+        setText("contactPhoneText", data.contactPhone);
+      }
+
+      window.ArgoTicketTemplate = {
+        apply: applyTicketData,
+        defaults: Object.assign({}, DEFAULT_DATA)
+      };
+
+      applyTicketData();
+    })();
+  </script>
+</body>
+</html>
