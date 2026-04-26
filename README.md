@@ -8,7 +8,7 @@ Production-ready A4 ticket template handoff package.
 - `assets/`
 - `INTEGRATION_RECIPES.md`
 - `DEVELOPER_HANDOFF.md`
-- preview images (`ticket-template-a4.png`, `ticket-template-a4-localhost.png`)
+- preview image (`ticket-template-preview.png`)
 
 ## Runtime API
 
