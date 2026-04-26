@@ -131,6 +131,5 @@ Note: legacy Clearbit Logo API is sunset (Dec 1, 2025), so avoid new integration
 
 - `INTEGRATION_RECIPES.md`
 - `DEVELOPER_HANDOFF.md`
-- `ticket-template-preview.png`
 
 These are intended for direct handover to implementation engineers.
