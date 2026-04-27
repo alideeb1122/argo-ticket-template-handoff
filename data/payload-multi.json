@@ -1,0 +1,17 @@
+﻿{
+  "clientLogoUrl": "",
+  "clientName": "ARGO Travel",
+  "pnr": "ZX9911",
+  "idNo": "A-10077",
+  "issueDate": "26APR.2026",
+  "status": "Confirmed",
+  "portalUrl": "https://b2b.argo-fly.com",
+  "passengers": [
+    { "name": "MR. ALI ESSA", "type": "Adult", "ticketNo": "1254759523" }
+  ],
+  "contactAddress": "Syria - Homs - AlDablan",
+  "contactWebsite": "Caesar-Road.com",
+  "contactPhone": "+963 960 648 098",
+  "showFirstSection": true,
+  "showSecondSection": true
+}

@@ -1,135 +1,40 @@
-﻿# Developer Handoff - Argo Ticket A4 Template
+﻿# Developer Handoff
 
-## Scope Completed
+## Delivery Status
 
-This handoff covers the ticket layout stabilization and integration hardening work done on the local project at:
+Project is now split and production-friendly:
 
-- `argo-ticket-template-handoff` repository root
+- HTML layout files are separate per ticket type.
+- CSS and JS are extracted into dedicated files.
+- Dynamic data is injected at runtime (template behavior, not static content).
+- PDF export is automated and validated to one-page A4.
 
-Main file:
+## Ticket Modes
 
-- `ticket-template-a4.html`
+- Multi ticket: `ticket-template-a4.html`
+- One-way ticket: `ticket-template-a4-oneway.html`
 
-Assets touched:
+## Runtime API
 
-- `assets/second-section/ticket-2-exact.png`
+Both templates expose:
 
-Reference asset used for exact logo match:
+- `window.ArgoTicketTemplate.apply(data)`
+- `window.ArgoTicketTemplate.defaults`
 
-- `assets/first-section/ticket-1-exact.png`
+## Stack-Agnostic Embed Helper
 
----
+- `scripts/argo-ticket-embed.js`
+- API: `ArgoTicketEmbed.mount({ mount, mode, data, basePath })`
 
-## What Was Fixed
+## PDF Reliability
 
-1. Corrected airline logo mismatch in Section 2 (Inbound block)
-- The airline logo/header in section 2 did not visually match section 1.
-- The right-side top header strip was replaced from the section 1 reference to ensure an exact visual match.
-- No other content blocks were altered.
+`npm run export:pdf` exports and validates:
 
-2. Applied cache-busting for updated section 2 image
-- `ticket-template-a4.html` now references:
-  - `assets/second-section/ticket-2-exact.png?v=3`
-- This prevents stale cached image rendering after updates.
+- `ticket-template-a4-final.pdf` => 1 page
+- `ticket-template-a4-oneway-final.pdf` => 1 page
 
-3. Refactored template for integration safety
-- CSS is fully scoped under `#argo-ticket-template` to reduce style collisions in host apps.
-- Removed legacy/unused CSS and JS from previous template iterations.
-- Exposed a small integration API:
-  - `window.ArgoTicketTemplate.apply(data)`
-  - `window.ArgoTicketTemplate.defaults`
-- DOM updates were implemented with broadly compatible APIs (no modern-only dependencies).
+## Notes for Engineering Team
 
----
-
-## Final Logo Size (Section 2)
-
-Measured on final source image `ticket-2-exact.png`:
-
-- Detected white logo glyph bounding box: `131 x 109 px`
-- Bounding coordinates in image: `x=1677..1807`, `y=16..124`
-- Full image size: `2215 x 990 px`
-
-Print-scale approximation (based on 188 mm rendered width):
-
-- ~`11.1 mm x 9.25 mm` visible logo glyph area
-
----
-
-## Data Contract for Runtime Injection
-
-Supported fields in `ArgoTicketTemplate.apply(data)`:
-
-- `clientLogoUrl: string`
-- `clientName: string`
-- `pnr: string`
-- `idNo: string`
-- `issueDate: string`
-- `status: string`
-- `portalUrl: string`
-- `passengers: Array<{ name: string, type: string, ticketNo: string }>`
-- `contactAddress: string`
-- `contactWebsite: string`
-- `contactPhone: string`
-- `showFirstSection: boolean` (default: `true`)
-- `showSecondSection: boolean` (default: `true`)
-- `firstSectionImageSrc: string`
-- `secondSectionImageSrc: string`
-
-### Airline branding variability
-
-Airline logos are expected to change between tickets.  
-Current implementation supports this by replacing section image sources per ticket payload:
-
-- `firstSectionImageSrc` for section 1 branding/content
-- `secondSectionImageSrc` for section 2 branding/content
-
-This allows:
-- Same airline on both sections
-- Different airline per section
-- Single-section tickets with correct branding
-
----
-
-## Integration Guidance
-
-- Keep `ticket-template-a4.html` and `assets/` under the same static host path.
-- Do not rename asset files unless references are updated accordingly.
-- For framework integration, use iframe embedding and call `.apply(data)` after frame load.
-- For print/PDF export flows, reuse the same HTML to preserve A4 proportions.
-- The template now supports variable ticket shape:
-  - First section only
-  - Second section only
-  - Both sections
-
----
-
-## Recommended Ready Logo Sources
-
-Use only assets that are legally allowed by each brand's usage guidelines.
-
-1. Simple Icons
-- Website: https://simpleicons.org
-- GitHub: https://github.com/simple-icons/simple-icons
-- Use case: brand SVG marks in consistent format.
-
-2. Iconify
-- Website: https://iconify.design
-- Docs: https://iconify.design/docs/
-- Use case: unified icon framework across many icon sets.
-
-3. Brandfetch Logo API (for domain-based logo retrieval)
-- Product: https://brandfetch.com
-- Docs: https://docs.brandfetch.com/docs/logo-api/
-- Use case: fetch and keep company logos up-to-date in app flows.
-
-Note: legacy Clearbit Logo API is sunset (Dec 1, 2025), so avoid new integrations on it.
-
----
-
-## Files Added For Team
-
-- `INTEGRATION_RECIPES.md`
-- `DEVELOPER_HANDOFF.md`
-
-These are intended for direct handover to implementation engineers.
+- Treat both HTML files as templates.
+- Do not keep business data hardcoded; inject payload from backend or frontend state.
+- Keep assets paths stable unless you also update references.

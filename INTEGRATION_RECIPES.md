@@ -1,178 +1,88 @@
-﻿# Argo Ticket Integration Recipes
+﻿# Integration Recipes (Any Stack)
 
-This file gives ready-to-use integration snippets for different stacks.
-All snippets target the same template file:
-
-- `./ticket-template-a4.html`
-
-## 1) Plain HTML (direct include)
-
-Use inside any static page:
+## 1) Plain HTML + JS
 
 ```html
-<iframe
-  src="./ticket-template-a4.html"
-  style="width: 100%; min-height: 1400px; border: 0;"
-  loading="lazy"
-></iframe>
-```
-
-## 2) Plain JavaScript (dynamic data)
-
-The template exposes:
-
-- `window.ArgoTicketTemplate.apply(data)`
-- `window.ArgoTicketTemplate.defaults`
-
-Example:
-
-```html
+<div id="ticketMount"></div>
+<script src="/scripts/argo-ticket-embed.js"></script>
 <script>
-  window.ArgoTicketTemplate.apply({
-    clientName: "ARGO Travel",
-    pnr: "ZX9911",
-    idNo: "A-10077",
-    issueDate: "26APR.2026",
-    status: "Confirmed",
-    passengers: [
-      { name: "MR. ALI ESSA", type: "Adult", ticketNo: "1254759523" },
-      { name: "MRS. LINA ESSA", type: "Adult", ticketNo: "1254759524" }
-    ],
-    contactAddress: "Syria - Homs - AlDablan",
-    contactWebsite: "caesar-road.com",
-    contactPhone: "+964 751 851 0187",
-    firstSectionImageSrc: "assets/first-section/ticket-1-exact.png",
-    secondSectionImageSrc: "assets/second-section/ticket-2-exact.png?v=3",
-    showFirstSection: true,
-    showSecondSection: false
+  ArgoTicketEmbed.mount({
+    mount: document.getElementById('ticketMount'),
+    mode: 'oneway',
+    basePath: '/',
+    data: {
+      clientName: 'ARGO Travel',
+      pnr: 'ZX9911',
+      idNo: 'A-10077',
+      issueDate: '26APR.2026',
+      status: 'Confirmed',
+      passengers: [
+        { name: 'MR. ALI ESSA', type: 'Adult', ticketNo: '1254759523' }
+      ]
+    }
   });
 </script>
 ```
 
-## Airline Logo per Ticket (important)
-
-Airline branding can vary per ticket and per section.  
-Use section image sources per ticket payload:
-
-```html
-<script>
-  window.ArgoTicketTemplate.apply({
-    // Example: outbound on one airline, inbound on another airline
-    firstSectionImageSrc: "assets/first-section/ticket-outbound-turkish.png",
-    secondSectionImageSrc: "assets/second-section/ticket-inbound-qatar.png?v=1",
-    showFirstSection: true,
-    showSecondSection: true
-  });
-</script>
-```
-
-## 3) React wrapper
+## 2) React
 
 ```jsx
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-export default function TicketTemplateFrame({ data }) {
+export default function Ticket({ data, mode = 'multi' }) {
   const ref = useRef(null);
 
   useEffect(() => {
-    const frame = ref.current;
-    if (!frame) return;
+    if (!ref.current || !window.ArgoTicketEmbed) return;
+    const inst = window.ArgoTicketEmbed.mount({
+      mount: ref.current,
+      mode,
+      basePath: '/',
+      data
+    });
+    return () => { if (ref.current) ref.current.innerHTML = ''; };
+  }, [data, mode]);
 
-    const onLoad = () => {
-      const win = frame.contentWindow;
-      if (win && win.ArgoTicketTemplate) {
-        win.ArgoTicketTemplate.apply(data || {});
-      }
-    };
-
-    frame.addEventListener("load", onLoad);
-    return () => frame.removeEventListener("load", onLoad);
-  }, [data]);
-
-  return (
-    <iframe
-      ref={ref}
-      src="/ticket-template-a4.html"
-      style={{ width: "100%", minHeight: 1400, border: 0 }}
-      title="Ticket Template"
-    />
-  );
+  return <div ref={ref} />;
 }
 ```
 
-## 4) Vue 3 wrapper
+## 3) Vue / Nuxt
 
-```vue
-<script setup>
-import { onMounted, ref, watch } from "vue";
+Use the same pattern as React:
 
-const props = defineProps({
-  data: { type: Object, default: () => ({}) }
-});
+- mount a container element
+- call `ArgoTicketEmbed.mount(...)` in `onMounted`
+- pass `mode: 'multi' | 'oneway'`
 
-const frameRef = ref(null);
-
-const applyData = () => {
-  const frame = frameRef.value;
-  const win = frame?.contentWindow;
-  if (win?.ArgoTicketTemplate) {
-    win.ArgoTicketTemplate.apply(props.data || {});
-  }
-};
-
-onMounted(() => {
-  frameRef.value?.addEventListener("load", applyData);
-});
-
-watch(() => props.data, applyData, { deep: true });
-</script>
-
-<template>
-  <iframe
-    ref="frameRef"
-    src="/ticket-template-a4.html"
-    style="width: 100%; min-height: 1400px; border: 0;"
-    title="Ticket Template"
-  />
-</template>
-```
-
-## 5) Node/Express serve
-
-```js
-import express from "express";
-import path from "node:path";
-
-const app = express();
-const root = path.resolve(".");
-
-app.use("/tickets", express.static(root));
-
-app.listen(3000, () => {
-  console.log("Open http://localhost:3000/tickets/ticket-template-a4.html");
-});
-```
-
-## 6) Laravel Blade include
+## 4) Laravel / Blade
 
 ```blade
-<iframe
-  src="{{ asset('ticket-template-a4.html') }}"
-  style="width:100%;min-height:1400px;border:0"
-  title="Ticket Template"
-></iframe>
+<div id="ticketMount"></div>
+<script src="{{ asset('scripts/argo-ticket-embed.js') }}"></script>
+<script>
+  ArgoTicketEmbed.mount({
+    mount: document.getElementById('ticketMount'),
+    mode: 'multi',
+    basePath: '{{ asset('') }}',
+    data: @json($ticketPayload)
+  });
+</script>
 ```
 
-## Integration Notes
+## 5) Backend PDF Pipelines
 
-- Keep `assets/` folder structure unchanged.
-- Keep file names unchanged to avoid broken image references.
-- `assets/second-section/ticket-2-exact.png?v=3` is intentional for cache busting.
-- Best practice: host `ticket-template-a4.html` and `assets/` under same origin.
-- If you need runtime data injection, prefer iframe + `ArgoTicketTemplate.apply()`.
-- You can toggle sections per ticket:
-  - `showFirstSection: true|false`
-  - `showSecondSection: true|false`
-- You can swap airline/logo visuals per ticket by changing:
-  - `firstSectionImageSrc`
-  - `secondSectionImageSrc`
+If backend generates PDFs, use `tools/export-pdfs.js` as baseline logic:
+
+- open HTML
+- apply print media
+- export A4 with zero margins
+- verify page count = 1
+
+## Integration Rules
+
+- Keep relative folder structure unchanged (`assets/`, `styles/`, `scripts/`).
+- Do not hardcode passenger or flight values in source; always inject using `apply(data)`.
+- Choose template by business case:
+  - `multi` for outbound/inbound tickets
+  - `oneway` for single-leg tickets
