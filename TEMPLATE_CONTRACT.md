@@ -30,10 +30,16 @@
 
 - `showFirstSection?: boolean`
 - `showSecondSection?: boolean`
+- `firstSectionAirlineLogoUrl?: string`
+- `firstSectionAirlineName?: string`
+- `secondSectionAirlineLogoUrl?: string`
+- `secondSectionAirlineName?: string`
 
 ### oneway
 
 - `showFirstSection?: boolean`
+- `firstSectionAirlineLogoUrl?: string`
+- `firstSectionAirlineName?: string`
 
 ## Behavior
 

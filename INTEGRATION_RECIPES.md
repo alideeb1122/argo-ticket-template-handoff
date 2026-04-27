@@ -16,6 +16,8 @@
       idNo: 'A-10077',
       issueDate: '26APR.2026',
       status: 'Confirmed',
+      firstSectionAirlineLogoUrl: '/logos/airlines/ajet.svg',
+      firstSectionAirlineName: 'AJET',
       passengers: [
         { name: 'MR. ALI ESSA', type: 'Adult', ticketNo: '1254759523' }
       ]
@@ -83,6 +85,11 @@ If backend generates PDFs, use `tools/export-pdfs.js` as baseline logic:
 
 - Keep relative folder structure unchanged (`assets/`, `styles/`, `scripts/`).
 - Do not hardcode passenger or flight values in source; always inject using `apply(data)`.
+- Feed airline brand from your logo library via:
+  - `firstSectionAirlineLogoUrl`
+  - `firstSectionAirlineName`
+  - `secondSectionAirlineLogoUrl`
+  - `secondSectionAirlineName`
 - Choose template by business case:
   - `multi` for outbound/inbound tickets
   - `oneway` for single-leg tickets

@@ -10,6 +10,8 @@
         passengers: [
           { name: "MR. ALI ESSA", type: "Adult", ticketNo: "1254759523" }
         ],
+        firstSectionAirlineLogoUrl: "assets/qatar-logo.png",
+        firstSectionAirlineName: "QATAR AIRWAYS",
         contactAddress: "Syria - Homs - AlDablan",
         contactWebsite: "Caesar-Road.com",
         contactPhone: "+963 960 648 098",
@@ -78,6 +80,20 @@
         section.classList.toggle("is-hidden", !visible);
       }
 
+      function setAirlineBrand(logoId, nameId, logoUrl, airlineName) {
+        const logo = document.getElementById(logoId);
+        const name = document.getElementById(nameId);
+        if (logo && logoUrl) {
+          logo.src = String(logoUrl);
+        }
+        if (logo && airlineName != null) {
+          logo.alt = String(airlineName);
+        }
+        if (name && airlineName != null) {
+          name.textContent = String(airlineName);
+        }
+      }
+
       function applyTicketData(input) {
         const data = Object.assign({}, DEFAULT_DATA, input || {});
 
@@ -90,6 +106,12 @@
         setText("portalUrl", data.portalUrl);
         setPassengers(data.passengers);
         setSectionVisibility("firstSection", data.showFirstSection);
+        setAirlineBrand(
+          "firstSectionAirlineLogo",
+          "firstSectionAirlineName",
+          data.firstSectionAirlineLogoUrl,
+          data.firstSectionAirlineName
+        );
 
         setText("contactAddressText", data.contactAddress);
         setText("contactWebsiteText", data.contactWebsite);

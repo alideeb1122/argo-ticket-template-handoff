@@ -9,6 +9,8 @@
   "passengers": [
     { "name": "MR. ALI ESSA", "type": "Adult", "ticketNo": "1254759523" }
   ],
+  "firstSectionAirlineLogoUrl": "/logos/airlines/ajet.svg",
+  "firstSectionAirlineName": "AJET",
   "contactAddress": "Syria - Homs - AlDablan",
   "contactWebsite": "Caesar-Road.com",
   "contactPhone": "+963 960 648 098",
