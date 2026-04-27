@@ -14,7 +14,11 @@
         contactWebsite: "Caesar-Road.com",
         contactPhone: "+963 960 648 098",
         showFirstSection: true,
-        showSecondSection: true
+        showSecondSection: true,
+        firstSectionAirlineLogoUrl: "assets/qatar-logo.png",
+        firstSectionAirlineName: "QATAR AIRWAYS",
+        secondSectionAirlineLogoUrl: "assets/qatar-logo.png",
+        secondSectionAirlineName: "QATAR AIRWAYS"
       };
 
       function setText(id, value) {
@@ -79,6 +83,20 @@
         section.classList.toggle("is-hidden", !visible);
       }
 
+      function setAirlineBrand(logoId, nameId, logoUrl, airlineName) {
+        const logo = document.getElementById(logoId);
+        const name = document.getElementById(nameId);
+        if (logo && logoUrl) {
+          logo.src = String(logoUrl);
+        }
+        if (logo && airlineName != null) {
+          logo.alt = String(airlineName);
+        }
+        if (name && airlineName != null) {
+          name.textContent = String(airlineName);
+        }
+      }
+
       function applyTicketData(input) {
         const data = Object.assign({}, DEFAULT_DATA, input || {});
 
@@ -92,6 +110,18 @@
         setPassengers(data.passengers);
         setSectionVisibility("firstSection", data.showFirstSection);
         setSectionVisibility("secondSection", data.showSecondSection);
+        setAirlineBrand(
+          "firstSectionAirlineLogo",
+          "firstSectionAirlineName",
+          data.firstSectionAirlineLogoUrl,
+          data.firstSectionAirlineName
+        );
+        setAirlineBrand(
+          "secondSectionAirlineLogo",
+          "secondSectionAirlineName",
+          data.secondSectionAirlineLogoUrl,
+          data.secondSectionAirlineName
+        );
 
         setText("contactAddressText", data.contactAddress);
         setText("contactWebsiteText", data.contactWebsite);

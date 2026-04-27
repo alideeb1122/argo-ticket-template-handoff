@@ -12,6 +12,10 @@
   "contactAddress": "Syria - Homs - AlDablan",
   "contactWebsite": "Caesar-Road.com",
   "contactPhone": "+963 960 648 098",
+  "firstSectionAirlineLogoUrl": "/logos/airlines/turkish-airlines.svg",
+  "firstSectionAirlineName": "TURKISH AIRLINES",
+  "secondSectionAirlineLogoUrl": "/logos/airlines/qatar-airways.svg",
+  "secondSectionAirlineName": "QATAR AIRWAYS",
   "showFirstSection": true,
   "showSecondSection": true
 }
