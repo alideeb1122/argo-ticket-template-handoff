@@ -107,7 +107,7 @@
 
     #argo-ticket-template .ticket-card-header {
       display: grid;
-      grid-template-columns: 1fr 42mm;
+      grid-template-columns: 1fr 37mm;
       background: #147dca;
       color: #fff;
       min-height: 12.2mm;
@@ -183,7 +183,7 @@
 
     #argo-ticket-template .ticket-card-body {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 42mm;
+      grid-template-columns: minmax(0, 1fr) 37mm;
       background: #fff;
     }
 
@@ -198,7 +198,7 @@
 
     #argo-ticket-template .ticket-card-outbound .ticket-card-header,
     #argo-ticket-template .ticket-card-inbound .ticket-card-header {
-      grid-template-columns: 1fr 42mm;
+      grid-template-columns: 1fr 37mm;
       min-height: 12.2mm;
     }
 
@@ -238,7 +238,7 @@
 
     #argo-ticket-template .ticket-card-outbound .ticket-card-body,
     #argo-ticket-template .ticket-card-inbound .ticket-card-body {
-      grid-template-columns: minmax(0, 1fr) 42mm;
+      grid-template-columns: minmax(0, 1fr) 37mm;
     }
 
     #argo-ticket-template .ticket-card-outbound .segment {
@@ -317,7 +317,7 @@
     #argo-ticket-template .ticket-card-outbound .panel-block,
     #argo-ticket-template .ticket-card-inbound .panel-block {
       min-height: auto;
-      padding: 4.8mm 2.7mm 2.6mm 2.7mm;
+      padding: 4.8mm 1.8mm 2.6mm 1.8mm;
     }
 
     #argo-ticket-template .ticket-card-outbound .detail-item.compact {
@@ -548,6 +548,11 @@
     #argo-ticket-template .ticket-card-inbound .detail-item .label {
       font-size: 3.55mm;
       letter-spacing: -0.05em;
+    }
+
+    #argo-ticket-template .detail-item .value {
+      font-weight: 500;
+      letter-spacing: 0;
     }
 
     #argo-ticket-template .is-hidden {

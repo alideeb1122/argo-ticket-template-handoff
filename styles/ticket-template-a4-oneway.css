@@ -97,7 +97,7 @@
     }
 
     #argo-ticket-template .ticket-card {
-      margin-top: 9.2mm;
+      margin-top: 50mm;
       width: var(--content-width);
       margin-left: auto;
       margin-right: auto;
@@ -109,7 +109,7 @@
 
     #argo-ticket-template .ticket-card-header {
       display: grid;
-      grid-template-columns: 1fr 42mm;
+      grid-template-columns: 1fr 37mm;
       background: #147dca;
       color: #fff;
       min-height: 12.2mm;
@@ -185,7 +185,7 @@
 
     #argo-ticket-template .ticket-card-body {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 42mm;
+      grid-template-columns: minmax(0, 1fr) 37mm;
       background: #fff;
     }
 
@@ -200,7 +200,7 @@
 
     #argo-ticket-template .ticket-card-outbound .ticket-card-header,
     #argo-ticket-template .ticket-card-inbound .ticket-card-header {
-      grid-template-columns: 1fr 42mm;
+      grid-template-columns: 1fr 37mm;
       min-height: 12.2mm;
     }
 
@@ -240,7 +240,7 @@
 
     #argo-ticket-template .ticket-card-outbound .ticket-card-body,
     #argo-ticket-template .ticket-card-inbound .ticket-card-body {
-      grid-template-columns: minmax(0, 1fr) 42mm;
+      grid-template-columns: minmax(0, 1fr) 37mm;
     }
 
     #argo-ticket-template .ticket-card-outbound .segment {
@@ -326,7 +326,7 @@
     #argo-ticket-template .ticket-card-outbound .panel-block,
     #argo-ticket-template .ticket-card-inbound .panel-block {
       min-height: auto;
-      padding: 4.8mm 2.7mm 2.6mm 2.7mm;
+      padding: 4.8mm 1.8mm 2.6mm 1.8mm;
     }
 
     #argo-ticket-template .ticket-card-outbound .detail-item.compact {
@@ -568,12 +568,17 @@
       letter-spacing: -0.05em;
     }
 
+    #argo-ticket-template .detail-item .value {
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
     #argo-ticket-template .is-hidden {
       display: none !important;
     }
 
     #argo-ticket-template .passengers {
-      margin-top: auto;
+      margin-top: 8mm;
       width: var(--content-width);
       margin-left: auto;
       margin-right: auto;
@@ -594,7 +599,7 @@
       border-right: 0.25mm solid #8b8b90;
       border-top: 0.25mm solid #8b8b90;
       text-align: center;
-      padding: 1.5mm 1.8mm;
+      padding: 1.3mm 1.6mm;
     }
 
     #argo-ticket-template .passengers-table tr:first-child th {
@@ -608,7 +613,7 @@
 
     #argo-ticket-template .passengers-table thead th {
       font-family: var(--font-display);
-      font-size: 4.75mm;
+      font-size: 4.35mm;
       line-height: 1.02;
       font-weight: 800;
       background: #fbfbfc;
@@ -616,7 +621,7 @@
     }
 
     #argo-ticket-template .passengers-table tbody td {
-      font-size: 5.1mm;
+      font-size: 4.65mm;
       line-height: 1.08;
       background: #e3e3e6;
       font-weight: 500;
@@ -733,11 +738,11 @@
       }
 
       #argo-ticket-template .ticket-card {
-        margin-top: 9.2mm;
+        margin-top: 50mm;
       }
 
       #argo-ticket-template .passengers {
-        margin-top: auto;
+        margin-top: 8mm;
       }
 
       #argo-ticket-template .footer-contact {
