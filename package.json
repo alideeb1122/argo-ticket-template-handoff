@@ -1,8 +1,10 @@
-﻿{
+{
   "name": "argo-ticket-templates",
   "private": true,
   "scripts": {
-    "export:pdf": "node tools/export-pdfs.js"
+    "export:pdf": "node tools/export-pdfs.js",
+    "export:ticket": "node tools/export-ticket-pdf.js",
+    "verify": "node tools/verify-templates.js && npm run export:pdf"
   },
   "dependencies": {
     "playwright": "^1.59.1"

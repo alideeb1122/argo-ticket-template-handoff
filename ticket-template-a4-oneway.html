@@ -26,7 +26,7 @@
             <div class="ticket-card-route">
               <img src="assets/flight-icon.png" alt="" />
               <div class="ticket-card-route-title">
-                <span>OUTBOUND</span>
+                <span id="firstSectionTitle">OUTBOUND</span>
               </div>
             </div>
             <div class="ticket-card-brand">
@@ -39,26 +39,26 @@
             <div class="ticket-card-main">
               <div class="segment">
                 <div class="segment-date">
-                  <div>05.03.2025.Wednsday</div>
+                  <div id="firstSegmentDepartureDate">05.03.2025.Wednsday</div>
                   <div></div>
-                  <div class="date-end">05.03.2025.Wednsday</div>
+                  <div id="firstSegmentArrivalDate" class="date-end">05.03.2025.Wednsday</div>
                 </div>
                 <div class="segment-city">
-                  <div class="segment-time">17:50</div>
-                  <div class="segment-code">DAM</div>
-                  <div class="segment-name">Damascus</div>
-                  <div class="segment-airport">intenational airport</div>
+                  <div id="firstSegmentDepartureTime" class="segment-time">17:50</div>
+                  <div id="firstSegmentDepartureCode" class="segment-code">DAM</div>
+                  <div id="firstSegmentDepartureCity" class="segment-name">Damascus</div>
+                  <div id="firstSegmentDepartureAirport" class="segment-airport">intenational airport</div>
                 </div>
                 <div class="segment-middle">
                   <img src="assets/plane-icon.png" alt="" />
-                  <div class="segment-duration">02h 45min</div>
+                  <div id="firstSegmentDuration" class="segment-duration">02h 45min</div>
                 </div>
                 <div class="segment-city segment-arrival">
-                  <div class="segment-time">20:35</div>
-                  <div class="segment-code">DOH</div>
-                  <div class="segment-name">Doha</div>
-                  <div class="segment-airport">intenational airport</div>
-                  <div class="segment-note">Terminal 4</div>
+                  <div id="firstSegmentArrivalTime" class="segment-time">20:35</div>
+                  <div id="firstSegmentArrivalCode" class="segment-code">DOH</div>
+                  <div id="firstSegmentArrivalCity" class="segment-name">Doha</div>
+                  <div id="firstSegmentArrivalAirport" class="segment-airport">intenational airport</div>
+                  <div id="firstSegmentArrivalTerminal" class="segment-note">Terminal 4</div>
                 </div>
               </div>
 
@@ -66,9 +66,9 @@
 
             <div class="ticket-card-panel">
               <div class="panel-block">
-                <div class="detail-item"><img src="assets/seat-icon.png" alt="" /><span class="value">Economy</span></div>
-                <div class="detail-item"><img src="assets/flight-icon.png" alt="" /><span class="value">QR3014</span></div>
-                <div class="detail-item"><img src="assets/baggage-icon.png" alt="" /><span class="value">Up 30KG</span></div>
+                <div class="detail-item"><img src="assets/seat-icon.png" alt="" /><span id="firstSegmentCabinClass" class="value">Economy</span></div>
+                <div class="detail-item"><img src="assets/flight-icon.png" alt="" /><span id="firstSegmentFlightNo" class="value">QR3014</span></div>
+                <div class="detail-item"><img src="assets/baggage-icon.png" alt="" /><span id="firstSegmentBaggage" class="value">Up 30KG</span></div>
               </div>
             </div>
           </div>
@@ -111,6 +111,7 @@
     </main>
   </div>
 
+    <script src="./scripts/ticket-template-core.js"></script>
     <script src="./scripts/ticket-template-a4-oneway.js"></script>
 </body>
 </html>

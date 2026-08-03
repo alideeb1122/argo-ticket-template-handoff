@@ -3,19 +3,21 @@
     var root = basePath || '.';
     var normalizedRoot = root.replace(/\/$/, '');
     if (mode === 'oneway') return normalizedRoot + '/ticket-template-a4-oneway.html';
-    return normalizedRoot + '/ticket-template-a4.html';
+    if (mode === 'multi') return normalizedRoot + '/ticket-template-a4.html';
+    throw new Error('ArgoTicketEmbed: `mode` must be `oneway` or `multi`.');
   }
 
-  function applyDataToFrame(frame, data) {
+  function applyDataToFrame(frame, ticketPayload) {
     var win = frame && frame.contentWindow;
     if (!win || !win.ArgoTicketTemplate || typeof win.ArgoTicketTemplate.apply !== 'function') return;
-    win.ArgoTicketTemplate.apply(data || {});
+    win.ArgoTicketTemplate.apply(ticketPayload || {});
   }
 
   function mount(options) {
     var opts = options || {};
     var mountNode = opts.mount;
     if (!mountNode) throw new Error('ArgoTicketEmbed.mount: `mount` is required.');
+    var currentData = opts.data || {};
 
     var frame = document.createElement('iframe');
     frame.src = getTemplatePath(opts.mode, opts.basePath);
@@ -26,7 +28,7 @@
     frame.style.border = opts.border || '0';
 
     frame.addEventListener('load', function () {
-      applyDataToFrame(frame, opts.data);
+      applyDataToFrame(frame, currentData);
       if (typeof opts.onReady === 'function') {
         opts.onReady({
           frame: frame,
@@ -40,7 +42,11 @@
 
     return {
       frame: frame,
-      apply: function (nextData) { applyDataToFrame(frame, nextData); }
+      apply: function (nextData) {
+        currentData = nextData || {};
+        applyDataToFrame(frame, currentData);
+      },
+      destroy: function () { frame.remove(); }
     };
   }
 

@@ -6,3 +6,7 @@ Thumbs.db
 # Optional local artifacts
 *.tmp
 *.bak
+tmp/
+output/
+handoff-email-argo*
+handoff argo.pdf

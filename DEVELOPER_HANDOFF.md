@@ -1,40 +1,38 @@
-﻿# Developer Handoff
+# Developer Handoff
 
-## Delivery Status
+## Assignment
 
-Project is now split and production-friendly:
+Integrate the redesigned Argo ticket into the existing application without changing its approved appearance.
 
-- HTML layout files are separate per ticket type.
-- CSS and JS are extracted into dedicated files.
-- Dynamic data is injected at runtime (template behavior, not static content).
-- PDF export is automated and validated to one-page A4.
+## First Files to Open
 
-## Ticket Modes
+1. `README.md`
+2. `TEMPLATE_CONTRACT.md`
+3. `data/payload-oneway.json` or `data/payload-multi.json`
+4. The matching approved PDF
 
-- Multi ticket: `ticket-template-a4.html`
-- One-way ticket: `ticket-template-a4-oneway.html`
+## Implementation Boundary
 
-## Runtime API
+The developer owns only:
 
-Both templates expose:
+- mapping Argo/API booking values into the documented payload;
+- selecting `oneway` or `multi`;
+- selecting logo URLs from the existing logo library;
+- hosting the template directory;
+- invoking the supplied Chromium PDF exporter.
 
-- `window.ArgoTicketTemplate.apply(data)`
-- `window.ArgoTicketTemplate.defaults`
+The developer must not redesign, simplify, recreate, or translate the HTML/CSS.
 
-## Stack-Agnostic Embed Helper
+## Acceptance Criteria
 
-- `scripts/argo-ticket-embed.js`
-- API: `ArgoTicketEmbed.mount({ mount, mode, data, basePath })`
+- All real booking values appear through `window.ArgoTicketTemplate.apply(payload)`.
+- Real booking values come from the payload; sample defaults are not production data.
+- The host stack does not override template CSS; use `scripts/argo-ticket-embed.js` for isolation.
+- PDFs are generated with the supplied Playwright/Chromium path.
+- `npm run verify` passes.
+- Both ticket modes export as exactly one A4 page.
+- The final output retains the approved alignment, rounded borders, spacing, icons, typography, contact row, and footer.
 
-## PDF Reliability
+## Rejection Conditions
 
-`npm run export:pdf` exports and validates:
-
-- `ticket-template-a4-final.pdf` => 1 page
-- `ticket-template-a4-oneway-final.pdf` => 1 page
-
-## Notes for Engineering Team
-
-- Treat both HTML files as templates.
-- Do not keep business data hardcoded; inject payload from backend or frontend state.
-- Keep assets paths stable unless you also update references.
+Reject the implementation if it uses a new table layout, square replacement boxes, added route text, labels beside the right-panel icons, screenshots as the layout, a different PDF engine, or any CSS rewrite.

@@ -1,4 +1,4 @@
-﻿{
+{
   "clientLogoUrl": "",
   "clientName": "ARGO Travel",
   "pnr": "ZX9911",
@@ -7,15 +7,119 @@
   "status": "Confirmed",
   "portalUrl": "https://b2b.argo-fly.com",
   "passengers": [
-    { "name": "MR. ALI ESSA", "type": "Adult", "ticketNo": "1254759523" }
+    {
+      "name": "MR. ALI ESSA",
+      "type": "Adult",
+      "ticketNo": "1254759523"
+    }
   ],
   "contactAddress": "Syria - Homs - AlDablan",
   "contactWebsite": "Caesar-Road.com",
   "contactPhone": "+963 960 648 098",
-  "firstSectionAirlineLogoUrl": "/logos/airlines/turkish-airlines.svg",
-  "firstSectionAirlineName": "TURKISH AIRLINES",
-  "secondSectionAirlineLogoUrl": "/logos/airlines/qatar-airways.svg",
-  "secondSectionAirlineName": "QATAR AIRWAYS",
-  "showFirstSection": true,
-  "showSecondSection": true
+  "firstSection": {
+    "visible": true,
+    "title": "OUTBOUND",
+    "stopover": "Stopover 6h 10m",
+    "airline": {
+      "logoUrl": "assets/qatar-logo.png",
+      "name": "QATAR AIRWAYS"
+    },
+    "segments": [
+      {
+        "departure": {
+          "date": "05.03.2025.Wednsday",
+          "time": "17:50",
+          "code": "DAM",
+          "city": "Damascus",
+          "airport": "international airport"
+        },
+        "arrival": {
+          "date": "05.03.2025.Wednsday",
+          "time": "20:35",
+          "code": "DOH",
+          "city": "Doha",
+          "airport": "international airport",
+          "terminal": "Terminal 4"
+        },
+        "duration": "02h 45min",
+        "cabinClass": "Economy",
+        "flightNo": "QR3014",
+        "baggage": "Up 30KG"
+      },
+      {
+        "departure": {
+          "date": "06.03.2025.Thursday",
+          "time": "02:45",
+          "code": "DOH",
+          "city": "Doha",
+          "airport": "international airport"
+        },
+        "arrival": {
+          "date": "06.03.2025.Thursday",
+          "time": "07:15",
+          "code": "IST",
+          "city": "Istanbul",
+          "airport": "Istanbul Airport",
+          "terminal": "Terminal I"
+        },
+        "duration": "04h 30min",
+        "cabinClass": "Economy",
+        "flightNo": "QR239",
+        "baggage": "Up 30KG"
+      }
+    ]
+  },
+  "secondSection": {
+    "visible": true,
+    "title": "INBOUND",
+    "stopover": "Stopover 3h 20m",
+    "airline": {
+      "logoUrl": "assets/qatar-logo.png",
+      "name": "QATAR AIRWAYS"
+    },
+    "segments": [
+      {
+        "departure": {
+          "date": "15.03.2025.Saturday",
+          "time": "13:10",
+          "code": "IST",
+          "city": "Istanbul",
+          "airport": "Istanbul Airport"
+        },
+        "arrival": {
+          "date": "15.03.2025.Saturday",
+          "time": "17:25",
+          "code": "DOH",
+          "city": "Doha",
+          "airport": "international airport",
+          "terminal": "Terminal 2"
+        },
+        "duration": "04h 15min",
+        "cabinClass": "Economy",
+        "flightNo": "QR240",
+        "baggage": "Up 30KG"
+      },
+      {
+        "departure": {
+          "date": "15.03.2025.Saturday",
+          "time": "20:45",
+          "code": "DOH",
+          "city": "Doha",
+          "airport": "international airport"
+        },
+        "arrival": {
+          "date": "15.03.2025.Saturday",
+          "time": "23:35",
+          "code": "DAM",
+          "city": "Damascus",
+          "airport": "international airport",
+          "terminal": "Terminal 1"
+        },
+        "duration": "02h 50min",
+        "cabinClass": "Economy",
+        "flightNo": "QR3015",
+        "baggage": "Up 30KG"
+      }
+    ]
+  }
 }

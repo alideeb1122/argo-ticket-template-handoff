@@ -1,18 +1,50 @@
-﻿{
+{
   "clientLogoUrl": "",
   "clientName": "ARGO Travel",
-  "pnr": "ZX9911",
-  "idNo": "A-10077",
-  "issueDate": "26APR.2026",
+  "pnr": "96AK99",
+  "idNo": "950291",
+  "issueDate": "03AUG.2026",
   "status": "Confirmed",
   "portalUrl": "https://b2b.argo-fly.com",
   "passengers": [
-    { "name": "MR. ALI ESSA", "type": "Adult", "ticketNo": "1254759523" }
+    {
+      "name": "MR. SALIM NASSR",
+      "type": "Adult",
+      "ticketNo": "1994861135716"
+    }
   ],
-  "firstSectionAirlineLogoUrl": "/logos/airlines/ajet.svg",
-  "firstSectionAirlineName": "AJET",
   "contactAddress": "Syria - Homs - AlDablan",
   "contactWebsite": "Caesar-Road.com",
   "contactPhone": "+963 960 648 098",
-  "showFirstSection": true
+  "firstSection": {
+    "visible": true,
+    "title": "OUTBOUND",
+    "airline": {
+      "logoUrl": "assets/qatar-logo.png",
+      "name": "QATAR AIRWAYS"
+    },
+    "segments": [
+      {
+        "departure": {
+          "date": "03.08.2026.Monday",
+          "time": "12:30",
+          "code": "IST",
+          "city": "Istanbul",
+          "airport": "Istanbul Airport"
+        },
+        "arrival": {
+          "date": "03.08.2026.Monday",
+          "time": "13:25",
+          "code": "TUN",
+          "city": "Tunis",
+          "airport": "Carthage Airport",
+          "terminal": "Terminal M"
+        },
+        "duration": "02h 45min",
+        "cabinClass": "Economy",
+        "flightNo": "TU215",
+        "baggage": "Up 2PCS"
+      }
+    ]
+  }
 }

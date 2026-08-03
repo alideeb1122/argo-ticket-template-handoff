@@ -1,137 +1,139 @@
 (function () {
-      const DEFAULT_DATA = {
-        clientLogoUrl: "",
-        clientName: "client name",
-        pnr: "ABCD12",
-        idNo: "123456",
-        issueDate: "05.03.2025",
-        status: "Confirmed",
-        portalUrl: "https://b2b.argo-fly.com",
-        passengers: [
-          { name: "MR. ALI ESSA", type: "Adult", ticketNo: "1254759523" }
-        ],
-        contactAddress: "Syria - Homs - AlDablan",
-        contactWebsite: "Caesar-Road.com",
-        contactPhone: "+963 960 648 098",
-        showFirstSection: true,
-        showSecondSection: true,
-        firstSectionAirlineLogoUrl: "assets/qatar-logo.png",
-        firstSectionAirlineName: "QATAR AIRWAYS",
-        secondSectionAirlineLogoUrl: "assets/qatar-logo.png",
-        secondSectionAirlineName: "QATAR AIRWAYS"
-      };
+  var core = window.ArgoTicketCore;
 
-      function setText(id, value) {
-        const element = document.getElementById(id);
-        if (element && value != null) {
-          element.textContent = String(value);
-        }
-      }
+  var DEFAULT_SEGMENT = {
+    departure: {
+      date: '05.03.2025.Wednsday',
+      time: '17:50',
+      code: 'DAM',
+      city: 'Damascus',
+      airport: 'intenational airport'
+    },
+    arrival: {
+      date: '05.03.2025.Wednsday',
+      time: '20:35',
+      code: 'DOH',
+      city: 'Doha',
+      airport: 'intenational airport',
+      terminal: 'Terminal 4'
+    },
+    duration: '02h 45min',
+    cabinClass: 'Economy',
+    flightNo: 'QR3014',
+    baggage: 'Up 30KG'
+  };
 
-      function clearElement(element) {
-        while (element.firstChild) {
-          element.removeChild(element.firstChild);
-        }
-      }
+  function copySegment(flightNo) {
+    return {
+      departure: Object.assign({}, DEFAULT_SEGMENT.departure),
+      arrival: Object.assign({}, DEFAULT_SEGMENT.arrival),
+      duration: DEFAULT_SEGMENT.duration,
+      cabinClass: DEFAULT_SEGMENT.cabinClass,
+      flightNo: flightNo,
+      baggage: DEFAULT_SEGMENT.baggage
+    };
+  }
 
-      function setClientLogo(url) {
-        const container = document.getElementById("clientMark");
-        if (!container) return;
+  var DEFAULT_TICKET = {
+    clientLogoUrl: '',
+    clientName: 'client name',
+    pnr: 'ABCD12',
+    idNo: '123456',
+    issueDate: '05.03.2025',
+    status: 'Confirmed',
+    portalUrl: 'https://b2b.argo-fly.com',
+    passengers: [
+      { name: 'MR. ALI ESSA', type: 'Adult', ticketNo: '1254759523' }
+    ],
+    contactAddress: 'Syria - Homs - AlDablan',
+    contactWebsite: 'Caesar-Road.com',
+    contactPhone: '+963 960 648 098',
+    firstSection: {
+      visible: true,
+      title: 'OUTBOUND',
+      stopover: 'Stopover 6h 10m',
+      airline: {
+        logoUrl: 'assets/qatar-logo.png',
+        name: 'QATAR AIRWAYS'
+      },
+      segments: [copySegment('QR3014'), copySegment('QR3014')]
+    },
+    secondSection: {
+      visible: true,
+      title: 'INBOUND',
+      stopover: 'Stopover 6h 10m',
+      airline: {
+        logoUrl: 'assets/qatar-logo.png',
+        name: 'QATAR AIRWAYS'
+      },
+      segments: [copySegment('013/014'), copySegment('013/014')]
+    }
+  };
 
-        clearElement(container);
+  function applyLegacySectionFields(input, legacyKeys) {
+    var section = input[legacyKeys.section] || {};
+    var airline = section.airline || {};
 
-        if (!url) {
-          container.appendChild(document.createTextNode("Client"));
-          container.appendChild(document.createElement("br"));
-          container.appendChild(document.createTextNode("Logo"));
-          return;
-        }
+    if (legacyKeys.visibility in input) section.visible = input[legacyKeys.visibility];
+    if (legacyKeys.logo in input) airline.logoUrl = input[legacyKeys.logo];
+    if (legacyKeys.name in input) airline.name = input[legacyKeys.name];
 
-        const image = document.createElement("img");
-        image.src = url;
-        image.alt = "Client logo";
-        container.appendChild(image);
-      }
+    section.airline = airline;
+    input[legacyKeys.section] = section;
+  }
 
-      function setPassengers(passengers) {
-        const body = document.getElementById("passengerRows");
-        if (!body || !Array.isArray(passengers) || passengers.length === 0) return;
+  function normalizeLegacyFields(input) {
+    applyLegacySectionFields(input, {
+      section: 'firstSection',
+      visibility: 'showFirstSection',
+      logo: 'firstSectionAirlineLogoUrl',
+      name: 'firstSectionAirlineName'
+    });
+    applyLegacySectionFields(input, {
+      section: 'secondSection',
+      visibility: 'showSecondSection',
+      logo: 'secondSectionAirlineLogoUrl',
+      name: 'secondSectionAirlineName'
+    });
+    return input;
+  }
 
-        clearElement(body);
+  function validateSection(section, sectionName) {
+    if (!section || section.segments == null) return;
+    if (!Array.isArray(section.segments) || section.segments.length !== 2) {
+      throw new Error(sectionName + ' requires exactly two designed flight segments.');
+    }
+  }
 
-        passengers.forEach(function (passenger) {
-          const row = document.createElement("tr");
-          const nameCell = document.createElement("td");
-          const typeCell = document.createElement("td");
-          const ticketCell = document.createElement("td");
+  function validateInput(input) {
+    validateSection(input.firstSection, 'firstSection');
+    validateSection(input.secondSection, 'secondSection');
+  }
 
-          nameCell.textContent = String(passenger.name || "");
-          typeCell.textContent = String(passenger.type || "");
-          ticketCell.textContent = String(passenger.ticketNo || "");
+  function applySection(sectionKey, segmentPrefix, section) {
+    core.setSectionVisibility(sectionKey, section.visible);
+    core.setText(sectionKey + 'Title', section.title);
+    core.setText(sectionKey + 'Stopover', section.stopover);
+    core.setAirlineBrand(
+      sectionKey + 'AirlineLogo',
+      sectionKey + 'AirlineName',
+      section.airline
+    );
+    core.applySegment(segmentPrefix + 'FirstSegment', section.segments[0]);
+    core.applySegment(segmentPrefix + 'SecondSegment', section.segments[1]);
+  }
 
-          row.appendChild(nameCell);
-          row.appendChild(typeCell);
-          row.appendChild(ticketCell);
-          body.appendChild(row);
-        });
-      }
+  function applyMultiFields(ticket) {
+    applySection('firstSection', 'firstSection', ticket.firstSection);
+    applySection('secondSection', 'secondSection', ticket.secondSection);
+  }
 
-      function setSectionVisibility(id, shouldShow) {
-        const section = document.getElementById(id);
-        if (!section) return;
-        const visible = shouldShow !== false;
-        section.classList.toggle("is-hidden", !visible);
-      }
-
-      function setAirlineBrand(logoId, nameId, logoUrl, airlineName) {
-        const logo = document.getElementById(logoId);
-        const name = document.getElementById(nameId);
-        if (logo && logoUrl) {
-          logo.src = String(logoUrl);
-        }
-        if (logo && airlineName != null) {
-          logo.alt = String(airlineName);
-        }
-        if (name && airlineName != null) {
-          name.textContent = String(airlineName);
-        }
-      }
-
-      function applyTicketData(input) {
-        const data = Object.assign({}, DEFAULT_DATA, input || {});
-
-        setClientLogo(data.clientLogoUrl);
-        setText("thanksClientName", data.clientName);
-        setText("pnr", data.pnr);
-        setText("idNo", data.idNo);
-        setText("issueDate", data.issueDate);
-        setText("status", data.status);
-        setText("portalUrl", data.portalUrl);
-        setPassengers(data.passengers);
-        setSectionVisibility("firstSection", data.showFirstSection);
-        setSectionVisibility("secondSection", data.showSecondSection);
-        setAirlineBrand(
-          "firstSectionAirlineLogo",
-          "firstSectionAirlineName",
-          data.firstSectionAirlineLogoUrl,
-          data.firstSectionAirlineName
-        );
-        setAirlineBrand(
-          "secondSectionAirlineLogo",
-          "secondSectionAirlineName",
-          data.secondSectionAirlineLogoUrl,
-          data.secondSectionAirlineName
-        );
-
-        setText("contactAddressText", data.contactAddress);
-        setText("contactWebsiteText", data.contactWebsite);
-        setText("contactPhoneText", data.contactPhone);
-      }
-
-      window.ArgoTicketTemplate = {
-        apply: applyTicketData,
-        defaults: Object.assign({}, DEFAULT_DATA)
-      };
-
-      applyTicketData();
-    })();
+  core.createTemplate({
+    version: '2.0.0',
+    mode: 'multi',
+    defaults: DEFAULT_TICKET,
+    normalizeInput: normalizeLegacyFields,
+    validateInput: validateInput,
+    applyMode: applyMultiFields
+  });
+})();

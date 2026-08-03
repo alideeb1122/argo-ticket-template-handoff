@@ -1,95 +1,100 @@
-﻿# Integration Recipes (Any Stack)
+# Integration Recipes
 
-## 1) Plain HTML + JS
+## Required Integration Flow
+
+1. Convert the Argo booking response into the payload in `TEMPLATE_CONTRACT.md`.
+2. Select `oneway` or `multi` from the business case.
+3. Pass the payload to the supplied template. Do not generate replacement markup.
+4. For PDF, run the supplied Chromium exporter.
+5. Run `npm run verify` before merge or deployment.
+
+## Plain HTML or Any Frontend Stack
+
+Host the repository under one public path, then use the iframe helper. The iframe prevents the host application's CSS from changing the ticket.
 
 ```html
 <div id="ticketMount"></div>
-<script src="/scripts/argo-ticket-embed.js"></script>
+<script src="/argo-ticket/scripts/argo-ticket-embed.js"></script>
 <script>
-  ArgoTicketEmbed.mount({
+  const ticket = ArgoTicketEmbed.mount({
     mount: document.getElementById('ticketMount'),
     mode: 'oneway',
-    basePath: '/',
-    data: {
-      clientName: 'ARGO Travel',
-      pnr: 'ZX9911',
-      idNo: 'A-10077',
-      issueDate: '26APR.2026',
-      status: 'Confirmed',
-      firstSectionAirlineLogoUrl: '/logos/airlines/ajet.svg',
-      firstSectionAirlineName: 'AJET',
-      passengers: [
-        { name: 'MR. ALI ESSA', type: 'Adult', ticketNo: '1254759523' }
-      ]
-    }
+    basePath: '/argo-ticket',
+    data: ticketPayload
   });
+
+  // Apply refreshed booking data without rebuilding the template.
+  ticket.apply(nextTicketPayload);
 </script>
 ```
 
-## 2) React
+## React
 
 ```jsx
 import { useEffect, useRef } from 'react';
 
-export default function Ticket({ data, mode = 'multi' }) {
-  const ref = useRef(null);
+export default function ArgoTicket({ ticketPayload, mode }) {
+  const mountRef = useRef(null);
 
   useEffect(() => {
-    if (!ref.current || !window.ArgoTicketEmbed) return;
-    const inst = window.ArgoTicketEmbed.mount({
-      mount: ref.current,
+    const ticket = window.ArgoTicketEmbed.mount({
+      mount: mountRef.current,
       mode,
-      basePath: '/',
-      data
+      basePath: '/argo-ticket',
+      data: ticketPayload
     });
-    return () => { if (ref.current) ref.current.innerHTML = ''; };
-  }, [data, mode]);
 
-  return <div ref={ref} />;
+    return () => ticket.destroy();
+  }, [mode, ticketPayload]);
+
+  return <div ref={mountRef} />;
 }
 ```
 
-## 3) Vue / Nuxt
+## Vue or Nuxt
 
-Use the same pattern as React:
+Call `ArgoTicketEmbed.mount()` inside `onMounted()`. Call the returned `destroy()` function inside `onBeforeUnmount()`. Keep the template files under the same public base path.
 
-- mount a container element
-- call `ArgoTicketEmbed.mount(...)` in `onMounted`
-- pass `mode: 'multi' | 'oneway'`
-
-## 4) Laravel / Blade
+## Laravel or Blade
 
 ```blade
 <div id="ticketMount"></div>
-<script src="{{ asset('scripts/argo-ticket-embed.js') }}"></script>
+<script src="{{ asset('argo-ticket/scripts/argo-ticket-embed.js') }}"></script>
 <script>
   ArgoTicketEmbed.mount({
     mount: document.getElementById('ticketMount'),
-    mode: 'multi',
-    basePath: '{{ asset('') }}',
+    mode: @json($ticketMode),
+    basePath: @json(asset('argo-ticket')),
     data: @json($ticketPayload)
   });
 </script>
 ```
 
-## 5) Backend PDF Pipelines
+Laravel should only build `$ticketPayload`. It must not translate the template into Blade tables or send it to DOMPDF.
 
-If backend generates PDFs, use `tools/export-pdfs.js` as baseline logic:
+## Backend PDF Service
 
-- open HTML
-- apply print media
-- export A4 with zero margins
-- verify page count = 1
+The repository includes a deterministic JSON-to-PDF command:
 
-## Integration Rules
+```bash
+npm run export:ticket -- --mode oneway --data storage/tickets/96AK99.json --output storage/tickets/96AK99.pdf
+```
 
-- Keep relative folder structure unchanged (`assets/`, `styles/`, `scripts/`).
-- Do not hardcode passenger or flight values in source; always inject using `apply(data)`.
-- Feed airline brand from your logo library via:
-  - `firstSectionAirlineLogoUrl`
-  - `firstSectionAirlineName`
-  - `secondSectionAirlineLogoUrl`
-  - `secondSectionAirlineName`
-- Choose template by business case:
-  - `multi` for outbound/inbound tickets
-  - `oneway` for single-leg tickets
+A PHP, Java, .NET, Python, or Node application can invoke the command in a worker, or reproduce the same Playwright calls from `tools/pdf-export-core.js`. The rendered source must remain the supplied HTML/CSS.
+
+## Airline and Client Logos
+
+- Use the application's logo library and pass the selected URL in `airline.logoUrl`.
+- Pass the Argo/client logo in `clientLogoUrl`.
+- Prefer SVG, PNG, or a data URL that Chromium can load.
+- The exporter fails when an image source cannot be loaded.
+
+## Acceptance Check
+
+```bash
+npm install
+npx playwright install chromium
+npm run verify
+```
+
+Both reference PDFs must export as one A4 page. Compare them with the committed `ticket-template-a4-final.pdf` and `ticket-template-a4-oneway-final.pdf`.
